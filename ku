@@ -62,21 +62,24 @@ public class DocumentServiceImpl implements DocumentService {
     public void createOrder(Order order) {
         orders.add(order);
     }
-    
+
+
     public void createInvoice(Invoice invoice) {
         invoices.add(invoice);
     }
-    
+
+
     public void createPaymentDocument(PaymentDocument paymentDocument) {
         paymentDocuments.add(paymentDocument);
     }
-    
+
+
     public void createWaybill(Waybill waybill) {
         waybills.add(waybill);
     }
-    
-    public void displayAllDocuments() {
-        // Логика для вывода всех документов
+
+
+    public void displayAllDocuments() {    
         System.out.println("Заказы: " + orders);
         System.out.println("Счета: " + invoices);
         System.out.println("Документы оплаты: " + paymentDocuments);

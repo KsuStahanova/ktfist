@@ -98,6 +98,12 @@ public class MainApp {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
+        List<Order> orders = new ArrayList<>();
+        List<Invoice> invoices = new ArrayList<>();
+        List<PaymentDocument> paymentDocuments = new ArrayList<>();
+        List<Waybill> waybills = new ArrayList<>();
+        
+        // Создание и добавление документов
         Order order = new Order();
         Invoice invoice = new Invoice();
         PaymentDocument paymentDocument = new PaymentDocument();
@@ -111,5 +117,3 @@ public class MainApp {
         documentService.displayAllDocuments();
     }
 }
-
-/

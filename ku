@@ -120,3 +120,116 @@ public class MainApp {
         documentService.displayAllDocuments();
     }
 }
+
+
+//  связи между классами
+
+// Класс заказа
+@OneToOne(mappedBy = "order")
+private Invoice invoice;
+
+@OneToOne(mappedBy = "order")
+private Waybill waybill;
+
+// Класс счета
+@OneToOne
+private Order order;
+
+// Класс документа об оплате
+@OneToOne
+private Invoice invoice;
+
+// Класс накладной
+@OneToOne
+private Order order;
+
+// Изменим интерфейс DocumentService
+public interface DocumentService {
+public void createOrder(Order order, Invoice invoice, Waybill waybill);
+public void createInvoice(Invoice invoice, Order order);
+public void createPaymentDocument(PaymentDocument paymentDocument, Invoice invoice);
+public void createWaybill(Waybill waybill, Order order);
+public void displayAllDocuments();
+}
+
+// Изменим реализацию
+@Service
+public class DocumentServiceImpl implements DocumentService {
+private List orders = new ArrayList<>();
+private List invoices = new ArrayList<>();
+private List paymentDocuments = new ArrayList<>();
+private List waybills = new ArrayList<>();
+
+
+public void createOrder(Order order, Invoice invoice, Waybill waybill) {
+    order.setInvoice(invoice);
+    order.setWaybill(waybill);
+    orders.add(order);
+}
+
+
+public void createInvoice(Invoice invoice, Order order) {
+    invoice.setOrder(order);
+    invoices.add(invoice);
+}
+
+
+public void createPaymentDocument(PaymentDocument paymentDocument, Invoice invoice) {
+    paymentDocument.setInvoice(invoice);
+    paymentDocuments.add(paymentDocument);
+}
+
+
+public void createWaybill(Waybill waybill, Order order) {
+    waybill.setOrder(order);
+    waybills.add(waybill);
+}
+
+
+public void displayAllDocuments() {    
+    System.out.println("Заказы: " + orders);
+    System.out.println("Счета: " + invoices);
+    System.out.println("Документы оплаты: " + paymentDocuments);
+    System.out.println("Накладные: " + waybills);
+}
+}
+
+// Добавим возможность вводить данные с консоли
+
+@Autowired
+private Scanner scanner;
+
+// В методе run добавим ввод данных с консоли и создание соответствующих объектов
+@Override
+public void run(ApplicationArguments args) throws Exception {
+Order order = new Order();
+Invoice invoice = new Invoice();
+PaymentDocument paymentDocument = new PaymentDocument();
+Waybill waybill = new Waybill();
+
+
+// Ввод данных с консоли
+System.out.println("Введите orderId:");
+order.setOrderId(scanner.nextInt());
+System.out.println("Введите totalAmount:");
+order.setTotalAmount(scanner.nextDouble());
+System.out.println("Введите orderDate (dd/MM/yyyy):");
+SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+Date orderDate = sdf.parse(scanner.next());
+order.setOrderDate(orderDate);
+
+// для остальных объектов
+
+documentService.createOrder(order, invoice, waybill);
+documentService.createInvoice(invoice, order);
+documentService.createPaymentDocument(paymentDocument, invoice);
+documentService.createWaybill(waybill, order);
+
+documentService.displayAllDocuments();
+}
+
+
+
+
+
+
